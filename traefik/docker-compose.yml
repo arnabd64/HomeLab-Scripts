@@ -1,0 +1,38 @@
+networks:
+  proxy-net:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v3
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    ports:
+      - 80:80   # HTTP
+      - 443:443 # HTTPS
+      - 8080:8080 # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    enironment:
+      - TZ=Asia/Kolkata
+    command:
+      - --api.dashboard=true
+      - --api.insecure=true  # set false in production
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+      - --prociders.docker.exposedbydefault=false
+      - --accesslog=true
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
