@@ -37,7 +37,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10
+      start_period: 10s
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik-dashboard.rule=Host(`traefik.homelab.local`)
