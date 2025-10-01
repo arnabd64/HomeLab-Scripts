@@ -24,6 +24,8 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --accesslog=true
+      - --ping=true
+      - --ping.entrypoint=web
     deploy:
       resources:
         limits:
