@@ -14,7 +14,7 @@ services:
       - 8080:8080 # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    enironment:
+    environment:
       - TZ=Asia/Kolkata
     command:
       - --api.dashboard=true
@@ -22,7 +22,7 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --providers.docker=true
-      - --prociders.docker.exposedbydefault=false
+      - --providers.docker.exposedbydefault=false
       - --accesslog=true
     deploy:
       resources:
