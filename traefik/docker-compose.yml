@@ -21,11 +21,11 @@ services:
       - --api.insecure=true  # set false in production
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+      - --entrypoints.traefik.address=:8080
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --accesslog=true
       - --ping=true
-      - --ping.entrypoint=web
     deploy:
       resources:
         limits:
