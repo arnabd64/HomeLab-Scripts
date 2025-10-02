@@ -38,7 +38,7 @@ services:
       - TZ=Asia/Kolkata
       - POSTGRES_USER=pgadmin
       - POSTGRES_PASSWORD=pgadmin-password
-      - POSTGRES_DATABASE=memos
+      - POSTGRES_DB=memos
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-h localhost", "-U pgadmin"]
       interval: 30s
