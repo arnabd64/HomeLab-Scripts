@@ -1,0 +1,34 @@
+networks:
+  proxy-net:
+    external: true
+
+volumes:
+  memos-data:
+
+services:
+  memos:
+    image: neosmemo/memos:stable
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    ports:
+      - 5230:5230
+    depends_on:
+      - postgres
+    environment:
+      - TZ=Asia/Kolkata
+      - MEMOS_DRIVER=postgres
+      - MEMOS_DSN=postgresql://pgadmin:pgadmin-password@postgres:5432/memos
+  
+  postgres:
+    image: postgres:alpine
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    expose:
+      - 5432
+    environment:
+      - TZ=Asia/Kolkata
+      - PG_USER=pgadmin
+      - PG_PASSWORD=pgadmin-password
+      - PG_DATABASE=memos
