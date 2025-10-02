@@ -19,7 +19,7 @@ services:
     environment:
       - TZ=Asia/Kolkata
       - MEMOS_DRIVER=postgres
-      - MEMOS_DSN=postgresql://pgadmin:pgadmin-password@postgres:5432/memos
+      - MEMOS_DSN=postgresql://pgadmin:pgadmin-password@postgres:5432/memos?sslmode=disable
     labels:
       - traefik.enable=true
       - traefik.http.routers.memos.rule=Host(`memos.homelab.local`)
