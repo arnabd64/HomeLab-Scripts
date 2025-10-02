@@ -3,7 +3,7 @@ networks:
     external: true
 
 volumes:
-  memos-data:
+  postgres-data:
 
 services:
   memos:
@@ -14,11 +14,16 @@ services:
     ports:
       - 5230:5230
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       - TZ=Asia/Kolkata
       - MEMOS_DRIVER=postgres
       - MEMOS_DSN=postgresql://pgadmin:pgadmin-password@postgres:5432/memos
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.memos.rule=Host(`memos.homelab.local`)
+      - traefik.http.routers.memos.entrypoints=web
   
   postgres:
     image: postgres:alpine
@@ -27,8 +32,16 @@ services:
       - proxy-net
     expose:
       - 5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     environment:
       - TZ=Asia/Kolkata
-      - PG_USER=pgadmin
-      - PG_PASSWORD=pgadmin-password
-      - PG_DATABASE=memos
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=pgadmin-password
+      - POSTGRES_DATABASE=memos
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-h localhost", "-U pgadmin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
